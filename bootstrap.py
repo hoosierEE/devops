@@ -2,57 +2,65 @@
 from platform import machine as mach
 import subprocess as s
 import sys
-cmds = {
-    update: 'sudo apt-get update',
-    apt: 'sudo apt-get install -y',
-    git: 'git clone',
-    gitrec: 'git clone --recursive',
-    curl: 'curl -O',
-    jver: 'j807_{}.deb'.format(['amd','arm'][mach()=='aarch64']),
-    dpkg: 'sudo dpkg -i',
-}
 
-targets = {
+update = 'sudo apt-get update '
+apt    = 'sudo apt-get install -y '
+git    = 'git clone '
+gitrec = 'git clone --recursive '
+curl   = 'curl -O '
+jver   = 'j807_{}64.deb'.format(['amd','arm'][mach()=='aarch64'])
+dpkg   = 'sudo dpkg -i '
+pip3   = 'pip3 install --user '
+
+TARGETS = {
     'emacs': [
-        (cmds.apt, 'emacs25-nox unifont'),
+        apt + 'emacs25-nox unifont',
     ],
     'xinu': [
-        (cmds.apt, 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make'),
-        (cmds.gitrec, 'git@github.iu.edu:ashroyer/xinu-s19.git'),
+        apt + 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
+        gitrec + 'git@github.iu.edu:ashroyer/xinu-s19.git',
     ],
     'k': [
-        (cmds.git, 'git@github.com:kevinlawler/kona.git'),
+        git + 'git@github.com:kevinlawler/kona.git',
+        'cd kona && make && cd -',
     ],
     'j': [
-        (cmds.curl, 'http://www.jsoftware.com/download/j807/install/'+jver),
-        (cmds.dpkg, jver),
+        curl + 'http://www.jsoftware.com/download/j807/install/' + jver,
+        dpkg + jver,
+        'ln -s $(which ijconsole) $HOME/bin/j',
+        'rm ' + jver,
     ],
     'e110': [
-        (cmds.apt, 'python3-pip'),
-        (cmds.pip3, 'myhdl'),
+        apt + 'python3-pip',
+        'pip3 install --user myhdl',
     ],
 }
-longest = max(map(len, targets))
 
-args = sys.argv[1:]
-usage = '''
-usage: python3 {} <options>
+LONGEST = max(map(len, TARGETS))
+ARGS = sys.argv[1:]
+USAGE = '''
+Usage: python3 {} <options>
+Possible options:
 
-options:
-{}'''.format(sys.argv[0], ''.join([
-    ' {}:{} apt-get install {}\n'
-    .format(k, ' '*(longest-len(k)), all_dicts[k]) for k in apt_pkgs]))
-
-def update(): shell('sudo apt-get update')
+{}'''.format(sys.argv[0], ''.join(
+    ['{}: {}{}\n'
+     .format(k, ' '*(LONGEST-len(k)),
+             ('\n  '+' '*LONGEST).join(TARGETS[k])
+     )
+             for k in TARGETS]))
 def shell(cmd): s.run([cmd], shell=True)
-def run(target):
-    for cmd in target:
-        shell(' '.join(cmd))
 
 if __name__ == "__main__":
-    if sum([int(a in args) for a in set(apt_pkgs)]):
-        update()
-        for a in args:
-            apt(apt_pkgs[a])
-    else:
-        print(usage)
+    if not sum([int(a in ARGS) for a in TARGETS]):
+        print(USAGE)
+        exit()
+
+    targets = []
+    # shell(update)
+    # shell('mkdir -p $HOME/bin')
+    for a in TARGETS:
+        if a in ARGS:
+            targets.append(TARGETS[a])
+    for target in targets:
+        for cmd in target:
+            [shell, print]['--dry-run' in ARGS](cmd)
