@@ -1,0 +1,11 @@
+* devops
+  Since termina/penguin container (default for Crostini) comes with Python3, why not use it instead of bash for getting all the development utilities and repos I will need?
+
+** usage
+
+   #+begin_src shell
+$ python3 bootstrap.py <options> [--dry-run]
+   #+end_src
+
+   - =options= are any of the recipes in the =TARGETS= dictionary.
+   - use =--dry-run= to see what would happen without changing anything.
