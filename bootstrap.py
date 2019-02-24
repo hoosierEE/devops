@@ -1,15 +1,21 @@
+# basically a Dockerfile, but in Python3
 from platform import machine
 import subprocess
 import sys
 
+# aliases for command prefixes (note trailing space)
 update = 'sudo apt-get update '
 apt    = 'sudo apt-get install -y '
 git    = 'git clone '
 gitrec = 'git clone --recursive '
 curl   = 'curl -O '
-jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
 dpkg   = 'sudo dpkg -i '
 pip3   = 'pip3 install --user '
+
+# aliases for deb packages (just the one at the moment)
+jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
+
+# strings of commands, sent (in order) to subprocess.run()
 TARGETS = {
     'emacs': [
         apt + 'emacs25-nox unifont',
@@ -35,10 +41,13 @@ TARGETS = {
         apt + 'python3-pip',
         'pip3 install --user myhdl',
     ],
+    'tex': [
+        'wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh'
+    ],
 }
 
+# print help text and nicely-formatted TARGETS
 LONGEST = max(map(len, TARGETS))
-ARGS = sys.argv[1:]
 USAGE = '''
 Usage: python3 {} <options> [--dry-run]
 Possible options:
@@ -52,16 +61,20 @@ def shell(x):
     subprocess.run([x], shell=True)
 
 if __name__ == "__main__":
+    ARGS = sys.argv[1:]
     if not sum([int(a in ARGS) for a in TARGETS]): print(USAGE); exit()
 
-    targets = [[update, 'mkdir -p $HOME/bin']]
-    for a in TARGETS:
+    # add pre-requisites here if desired
+    targets = [
+        [update, 'mkdir -p $HOME/bin'],
+        [apt + 'wget'],
+    ]
+    for a in TARGETS: # append targets specified on CLI
         if a in ARGS:
             targets.append(TARGETS[a])
 
-    DRY = '--dry-run' in ARGS
-    if DRY: print('  [omit --dry-run to perform the following commands]')
-
-    for tar in targets:
+    dry = '--dry-run' in ARGS
+    if dry: print('  [omit --dry-run to perform the following commands]')
+    for tar in targets: # install (or just print) everything in the list
         for cmd in tar:
-            [shell, print][DRY](cmd)
+            [shell, print][dry](cmd)

@@ -1,5 +1,8 @@
 * devops
-  Since termina/penguin container (default for Crostini) comes with Python3, why not use it instead of bash for getting all the development utilities and repos I will need?
+  Since the =termina/penguin= container in [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, why not use it instead of bash for getting all the development utilities and repos I will need?
+
+* =bootstrap.py=
+  Installs things.  Assumes passwordless =sudo= privilege level, which is the case in the Crostini container.
 
 ** usage
 
@@ -48,3 +51,33 @@ k:     sudo apt-get install -y rlwrap make
        ln -s $HOME/repo/kona/k $HOME/bin/k
 
    #+end_src
+
+* =ssh_config=
+  Copy this file to =$HOME/.ssh/config= for better ssh-ing.  BTW you have to put the public key on the server first, either via the GitHub/GitLab web UI, or =ssh-copy-id=.
+
+* TinyTeX
+  TinyTeX only installs what you need.
+
+  - [[https://yihui.name/tinytex/][homepage]]
+  - [[https://github.com/brimoran/Linux-on-ASUS-C101PA][someone using it on Crostini]]
+
+** usage
+   1. try to build your .tex file
+   2. see an error message like =! LaTeX Error: File `times.sty' not found.=
+   3. run =tlmgr search --global --file "filename"= to see what package provides the file (in this case the output looks like):
+
+      #+begin_src shell
+   $ tlmgr search --global --file "/times.sty"
+   psnfss:
+           texmf-dist/tex/latex/psnfss/times.sty
+   ...
+      #+end_src
+   4. finally do =tlmgr install psnfss= to get the needed thing
+   5. general-purpose fix for other confusing errors is:
+      #+begin_src shell
+   tlmgr update --self --all
+   tlmgr path add
+   fmtutil-sys --all
+      #+end_src
+
+
