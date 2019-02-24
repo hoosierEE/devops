@@ -2,34 +2,38 @@
 from platform import machine as mach
 import subprocess as s
 import sys
-apt = 'sudo apt-get install -y'
-git = 'git clone'
-gitrec = 'git clone --recursive'
-curl = 'curl -O'
-jver = 'j807_{}.deb'.format(['amd','arm'][mach()=='aarch64'])
-dpkg = 'sudo dpkg -i'
+cmds = {
+    update: 'sudo apt-get update',
+    apt: 'sudo apt-get install -y',
+    git: 'git clone',
+    gitrec: 'git clone --recursive',
+    curl: 'curl -O',
+    jver: 'j807_{}.deb'.format(['amd','arm'][mach()=='aarch64']),
+    dpkg: 'sudo dpkg -i',
+}
 
 targets = {
     'emacs': [
-        apt, 'emacs25-nox unifont',
+        (cmds.apt, 'emacs25-nox unifont'),
     ],
     'xinu': [
-        apt, 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
-        gitrec, 'git@github.iu.edu:ashroyer/xinu-s19.git',
+        (cmds.apt, 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make'),
+        (cmds.gitrec, 'git@github.iu.edu:ashroyer/xinu-s19.git'),
     ],
     'k': [
-        git, 'git@github.com:kevinlawler/kona.git',
+        (cmds.git, 'git@github.com:kevinlawler/kona.git'),
     ],
     'j': [
-        curl, 'http://www.jsoftware.com/download/j807/install/'+jver,
-        dpkg, jver,
+        (cmds.curl, 'http://www.jsoftware.com/download/j807/install/'+jver),
+        (cmds.dpkg, jver),
     ],
     'e110': [
-        apt, 'python3-pip',
-        pip3, 'myhdl',
+        (cmds.apt, 'python3-pip'),
+        (cmds.pip3, 'myhdl'),
     ],
 }
 longest = max(map(len, targets))
+
 args = sys.argv[1:]
 usage = '''
 usage: python3 {} <options>
@@ -41,8 +45,9 @@ options:
 
 def update(): shell('sudo apt-get update')
 def shell(cmd): s.run([cmd], shell=True)
-def apt(cmd): shell('sudo apt-get install -y '+cmd)
-def git(repo, newname = ''): shell('git clone '+repo+' '+newname)
+def run(target):
+    for cmd in target:
+        shell(' '.join(cmd))
 
 if __name__ == "__main__":
     if sum([int(a in args) for a in set(apt_pkgs)]):
@@ -51,4 +56,3 @@ if __name__ == "__main__":
             apt(apt_pkgs[a])
     else:
         print(usage)
-

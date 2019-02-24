@@ -1,0 +1,20 @@
+Host github.iu.edu
+HostName github.iu.edu
+User ashroyer
+IdentityFile ~/.ssh/git
+PubkeyAuthentication yes
+VisualHostKey yes
+
+Host github.com
+HostName github.com
+User hoosieree
+IdentityFile ~/.ssh/git
+PubkeyAuthentication yes
+VisualHostKey yes
+
+Host gitlab.com
+HostName gitlab.com
+User hoosieree
+IdentityFile ~/.ssh/git
+PubkeyAuthentication yes
+VisualHostKey yes
