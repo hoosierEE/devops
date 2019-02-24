@@ -1,6 +1,5 @@
-# $ python3 devops.py
-from platform import machine as mach
-import subprocess as s
+from platform import machine
+import subprocess
 import sys
 
 update = 'sudo apt-get update '
@@ -8,7 +7,7 @@ apt    = 'sudo apt-get install -y '
 git    = 'git clone '
 gitrec = 'git clone --recursive '
 curl   = 'curl -O '
-jver   = 'j807_{}64.deb'.format(['amd','arm'][mach()=='aarch64'])
+jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
 dpkg   = 'sudo dpkg -i '
 pip3   = 'pip3 install --user '
 TARGETS = {
@@ -47,14 +46,16 @@ Possible options:
 {}'''.format(sys.argv[0], ''.join(
     ['{}: {}{}\n'
      .format(k, ' '*(LONGEST-len(k)), ('\n  '+' '*LONGEST).join(TARGETS[k]))
-    for k in TARGETS
-    ]))
+    for k in TARGETS]))
 
-def shell(x): s.run([x], shell=True)
+def shell(x):
+    subprocess.run([x], shell=True)
+
 if __name__ == "__main__":
     if not sum([int(a in ARGS) for a in TARGETS]): print(USAGE); exit()
+
     targets = [[update, 'mkdir -p $HOME/bin']]
-    for a in TARGETS:  # todos
+    for a in TARGETS:
         if a in ARGS:
             targets.append(TARGETS[a])
 

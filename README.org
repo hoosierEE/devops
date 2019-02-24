@@ -10,7 +10,13 @@ $ python3 bootstrap.py <options> [--dry-run]
    - =options= are any of the recipes in the =TARGETS= dictionary.
    - use =--dry-run= to see what would happen without changing anything.
 
-** example
+** examples
+
+   #+begin_src shell
+$ python3 bootstrap.py k
+   #+end_src
+
+   This would clone the [[git@github.com:kevinlawler/kona.git][kona]] source from GitHub, =make= it, and put a symlink to the executable in =$HOME/bin/k=.
 
    #+begin_src shell
 $ python3 bootstrap.py j xinu
