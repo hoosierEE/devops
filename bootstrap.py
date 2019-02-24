@@ -4,13 +4,15 @@ import subprocess
 import sys
 
 # aliases for command prefixes (note trailing space)
-update = 'sudo apt-get update '
-apt    = 'sudo apt-get install -y '
-git    = 'git clone '
-gitrec = 'git clone --recursive '
-curl   = 'curl -O '
-dpkg   = 'sudo dpkg -i '
-pip3   = 'pip3 install --user '
+update  = 'sudo apt-get update '
+apt     = 'sudo apt-get install -y '
+git     = 'git clone '
+gitrec  = 'git clone --recursive '
+curl    = 'curl -O '
+dpkg    = 'sudo dpkg -i '
+pip3    = 'pip3 install --user '
+bindir  = '$HOME/bin/'
+repodir = '$HOME/repo/'
 
 # aliases for deb packages (just the one at the moment)
 jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
@@ -18,27 +20,27 @@ jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
 # strings of commands, sent (in order) to subprocess.run()
 TARGETS = {
     'emacs': [
-        apt + 'emacs25-nox unifont',
+        apt+'emacs25-nox unifont',
     ],
     'xinu': [
-        apt + 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
-        gitrec + 'git@github.iu.edu:ashroyer/xinu-s19.git ~/repo/xinu-s19',
+        apt+'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
+        gitrec+'git@github.iu.edu:ashroyer/xinu-s19.git '+repodir+'xinu-s19',
     ],
     'k': [
-        apt + 'rlwrap make',
-        git + 'git@github.com:kevinlawler/kona.git $HOME/repo/kona',
-        'cd $HOME/repo/kona && make && cd -',
-        'rm -f $HOME/bin/k',
-        'ln -s $HOME/repo/kona/k $HOME/bin/k'
+        apt+'rlwrap make',
+        git+'git@github.com:kevinlawler/kona.git '+repodir+'kona',
+        'cd '+repodir+'kona && make && cd -',
+        'rm -f '+bindir+'k',
+        'ln -s '+repodir+'kona/k '+bindir+'k',
     ],
     'j': [
-        curl + 'http://www.jsoftware.com/download/j807/install/' + jver,
-        dpkg + jver,
-        'ln -s $(which ijconsole) $HOME/bin/j',
-        'rm ' + jver,
+        curl+'http://www.jsoftware.com/download/j807/install/'+jver,
+        dpkg+jver,
+        'ln -s $(which ijconsole) '+bindir+'j',
+        'rm '+jver,
     ],
     'e110': [
-        apt + 'python3-pip',
+        apt+'python3-pip',
         'pip3 install --user myhdl',
     ],
     'tex': [
@@ -66,8 +68,8 @@ if __name__ == "__main__":
 
     # add pre-requisites here if desired
     targets = [
-        [update, 'mkdir -p $HOME/bin'],
-        [apt + 'wget'],
+        [update, 'mkdir -p '+bindir],
+        [apt+'wget'],
     ]
     for a in TARGETS: # append targets specified on CLI
         if a in ARGS:
