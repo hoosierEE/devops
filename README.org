@@ -9,3 +9,36 @@ $ python3 bootstrap.py <options> [--dry-run]
 
    - =options= are any of the recipes in the =TARGETS= dictionary.
    - use =--dry-run= to see what would happen without changing anything.
+
+** example
+
+   #+begin_src shell
+$ python3 bootstrap.py j xinu
+   #+end_src
+
+   This would install [[https://code.jsoftware.com/wiki/System/Installation/Linux][J]] as a =.deb= package, and clone my private copy of the [[https://github.iu.edu/SICE-OS/xinu][Xinu]] repo.
+
+** help text
+   Call the script with no arguments to see this message:
+
+   #+begin_src shell
+
+Usage: python3 bootstrap.py <options> [--dry-run]
+Possible options:
+
+emacs: sudo apt-get install -y emacs25-nox unifont
+xinu:  sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
+       git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git ~/repo/xinu-s19
+j:     curl -O http://www.jsoftware.com/download/j807/install/j807_arm64.deb
+       sudo dpkg -i j807_arm64.deb
+       ln -s $(which ijconsole) $HOME/bin/j
+       rm j807_arm64.deb
+e110:  sudo apt-get install -y python3-pip
+       pip3 install --user myhdl
+k:     sudo apt-get install -y rlwrap make
+       git clone git@github.com:kevinlawler/kona.git $HOME/repo/kona
+       cd $HOME/repo/kona && make && cd -
+       rm -f $HOME/bin/k
+       ln -s $HOME/repo/kona/k $HOME/bin/k
+
+   #+end_src
