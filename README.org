@@ -1,20 +1,24 @@
+#+TITLE: DevOps Bootstrap
+#+OPTIONS: toc:nil date:nil num:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css"/>
 * devops
   Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
 
 * bootstrap.py
   Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.
-
+  
 ** usage
    #+begin_src shell
 $ python3 bootstrap.py <options> [--dry-run]
    #+end_src
    - =options= are any of the recipes in the =TARGETS= dictionary.
    - use =--dry-run= to see what would happen without changing anything.
+   - use =emacs_org_fix= if spacemacs org-export has [[https://github.com/syl20bnr/spacemacs/issues/6296#issuecomment-289727260][this issue]]. 
 ** examples
    #+begin_src shell
 $ python3 bootstrap.py k
    #+end_src
-   This would clone the [[git@github.com:kevinlawler/kona.git][kona]] source from GitHub, =make= it, and put a symlink to the executable in =$HOME/bin/k=.
+   This would clone the [[https://github.com/kevinlawler/kona.git][kona]] source from GitHub, =make= it, and put a symlink to the executable in =$HOME/bin/k=.
    #+begin_src shell
 $ python3 bootstrap.py j xinu
    #+end_src
@@ -25,21 +29,23 @@ $ python3 bootstrap.py j xinu
 Usage: python3 bootstrap.py <options> [--dry-run]
 Possible options:
 
-emacs: sudo apt-get install -y emacs25-nox unifont
-xinu:  sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
-       git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git ~/repo/xinu-s19
-j:     curl -O http://www.jsoftware.com/download/j807/install/j807_arm64.deb
-       sudo dpkg -i j807_arm64.deb
-       ln -s $(which ijconsole) $HOME/bin/j
-       rm j807_arm64.deb
-e110:  sudo apt-get install -y python3-pip
-       pip3 install --user myhdl
-k:     sudo apt-get install -y rlwrap make
-       git clone git@github.com:kevinlawler/kona.git $HOME/repo/kona
-       cd $HOME/repo/kona && make && cd -
-       rm -f $HOME/bin/k
-       ln -s $HOME/repo/kona/k $HOME/bin/k
-
+xinu:          sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
+               git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git $HOME/repo/xinu-s19
+e110:          sudo apt-get install -y python3-pip
+               pip3 install --user myhdl
+emacs:         sudo apt-get install -y emacs25-nox unifont
+emacs_org_fix: for dir in "$HOME/.emacs.d/elpa/org-"*/; do find $dir -name "*.elc" -delete; done
+k:             sudo apt-get install -y rlwrap make
+               git clone git@github.com:kevinlawler/kona.git $HOME/repo/kona
+               cd $HOME/repo/kona && make && cd -
+               rm -f $HOME/bin/k
+               ln -s $HOME/repo/kona/k $HOME/bin/k
+texlive:       sudo apt-get install -y texlive-latex-recommended
+j:             curl -O http://www.jsoftware.com/download/j807/install/j807_arm64.deb
+               sudo dpkg -i j807_arm64.deb
+               ln -s $(which ijconsole) $HOME/bin/j
+               rm j807_arm64.deb
+tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh
    #+end_src
 
 * ssh_config

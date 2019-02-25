@@ -22,6 +22,9 @@ TARGETS = {
     'emacs': [
         apt+'emacs25-nox unifont',
     ],
+    'emacs_org_fix': [
+        'for dir in "$HOME/.emacs.d/elpa/org-"*/; do find $dir -name "*.elc" -delete; done',
+    ],
     'xinu': [
         apt+'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
         gitrec+'git@github.iu.edu:ashroyer/xinu-s19.git '+repodir+'xinu-s19',
@@ -46,6 +49,9 @@ TARGETS = {
     'tex': [
         'wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh'
     ],
+    'texlive': [
+        apt+'texlive-latex-recommended',
+    ]
 }
 
 # print help text and nicely-formatted TARGETS
@@ -80,3 +86,4 @@ if __name__ == "__main__":
     for tar in targets: # install (or just print) everything in the list
         for cmd in tar:
             [shell, print][dry](cmd)
+
