@@ -1,7 +1,6 @@
-#+TITLE: DevOps Bootstrap
+#+TITLE: devops
 #+OPTIONS: toc:nil date:nil num:nil html-postamble:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css"/>
-* devops
   Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
 
 * bootstrap.py
