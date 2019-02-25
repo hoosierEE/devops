@@ -1,7 +1,7 @@
 #+TITLE: devops
 #+OPTIONS: toc:nil date:nil num:nil html-postamble:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css"/>
-  Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
+Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
 
 * bootstrap.py
   Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.
@@ -59,22 +59,21 @@ tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | 
 ** usage
    1. try to build your =*.tex= files
    2. see an error message like =! LaTeX Error: File `times.sty' not found.=
-   3. run ~tlmgr search --global --file "filename"~ to see what package provides the file (in this case the output looks like):
-
+   3. run the following to see what package provides the file:
       #+begin_src shell
-   $ tlmgr search --global --file "/times.sty"
-   psnfss:
-           texmf-dist/tex/latex/psnfss/times.sty
-   ...
+$ tlmgr search --global --file "/times.sty"
+psnfss:
+        texmf-dist/tex/latex/psnfss/times.sty
+...
       #+end_src
    4. finally do =tlmgr install psnfss= to get the needed thing
    5. if you're awesome, note which packages were installed (i.e. add them to =bootstrap.py=) to avoid this step in the future
 
-A general-purpose fix for other confusing errors is:
-      #+begin_src shell
-   tlmgr update --self --all
-   tlmgr path add
-   fmtutil-sys --all
-      #+end_src
+   A general-purpose fix for other confusing errors is:
+   #+begin_src shell
+tlmgr update --self --all
+tlmgr path add
+fmtutil-sys --all
+   #+end_src
 
 
