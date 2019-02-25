@@ -59,7 +59,7 @@ tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | 
 ** usage
    1. try to build your =*.tex= files
    2. see an error message like =! LaTeX Error: File `times.sty' not found.=
-   3. run =tlmgr search --global --file "filename"= to see what package provides the file (in this case the output looks like):
+   3. run ~tlmgr search --global --file "filename"~ to see what package provides the file (in this case the output looks like):
 
       #+begin_src shell
    $ tlmgr search --global --file "/times.sty"
