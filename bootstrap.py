@@ -19,6 +19,9 @@ jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
 
 # strings of commands, sent (in order) to subprocess.run()
 TARGETS = {
+    'tmux': [
+        apt+'tmux',
+    ],
     'emacs': [
         apt+'emacs25-nox unifont',
     ],
