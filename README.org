@@ -75,5 +75,3 @@ tlmgr update --self --all
 tlmgr path add
 fmtutil-sys --all
    #+end_src
-
-
