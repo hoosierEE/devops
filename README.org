@@ -4,7 +4,8 @@
 Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
 
 * bootstrap.py
-  Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.
+  Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.  Probably won't work unless you're also on Crostini/Ubuntu 18.04.
+
   
 ** usage
    #+begin_src shell
@@ -24,6 +25,7 @@ $ python3 bootstrap.py j xinu
    This would install [[https://code.jsoftware.com/wiki/System/Installation/Linux][J]] as a =.deb= package, and clone my private copy of the [[https://github.iu.edu/SICE-OS/xinu][Xinu]] repo.
 ** help text
    Call the script with no arguments to see this message:
+
    #+begin_src shell
 Usage: python3 bootstrap.py <options> [--dry-run]
 Possible options:

@@ -52,9 +52,9 @@ TARGETS = {
     'tex': [
         'wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh'
     ],
-    'texlive': [
-        apt+'texlive-latex-recommended',
-    ]
+    # 'texlive': [
+    #     apt+'texlive-latex-recommended',
+    # ]
 }
 
 # print help text and nicely-formatted TARGETS

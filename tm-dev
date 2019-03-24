@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# to install: make this executable; put it in ~/bin.
+# launch a new tmux session with emacs on the left pane
+# and the cursor in a shell on the right.
+tmux new-session -d -s 'lx' \; \
+     send-keys 'emacs' C-m \; \
+     split-window -h \; \
+     attach
