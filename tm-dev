@@ -1,20 +1,10 @@
 #!/bin/sh
-tmux new-session -d -s 'lx' emacs --daemon
-
-# wait for emacs server to start before attaching clients
-for i in {1..5}; do
-    pgrep emacs && break
-    echo "waiting for emacs daemon to start"
-    sleep 1
-done
-
-tmux new-window -n 'xinu'
+export ALTERNATE_EDITOR=""
+tmux new-session -d -s 'lx' -n 'phd'
 tmux send-keys 'emacsclient -nw' C-m
 tmux split-window -v -p 10
-tmux new-window -n 'e110'
-tmux send-keys 'emacsclient -nw' C-m
-tmux split-window -v -p 10
-tmux new-window -n 'misc'
+
+tmux new-window -n 'teach'
 tmux send-keys 'emacsclient -nw' C-m
 tmux split-window -v -p 10
 
