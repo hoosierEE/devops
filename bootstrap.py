@@ -15,7 +15,9 @@ bindir  = '$HOME/bin/'
 repodir = '$HOME/repo/'
 
 # aliases for deb packages (just the one at the moment)
-jver   = 'j807_{}64.deb'.format(['amd','arm'][machine()=='aarch64'])
+JVER   = '807'  # or 807
+jurl   = 'j{}_{}64.deb'.format(JVER, ['amd','arm'][machine()=='aarch64'])
+jbeta  = 'http://www.jsoftware.com/download/j901/install/j901_linux64.tar.gz'
 
 # strings of commands, sent (in order) to subprocess.run()
 TARGETS = {
@@ -40,10 +42,17 @@ TARGETS = {
         'ln -s '+repodir+'kona/k '+bindir+'k',
     ],
     'j': [
-        curl+'http://www.jsoftware.com/download/j807/install/'+jver,
-        dpkg+jver,
+        curl+'http://www.jsoftware.com/download/j'+JVER+'/install/'+jurl,
+        dpkg+jurl,
         'ln -s $(which ijconsole) '+bindir+'j',
-        'rm '+jver,
+        'rm '+jurl,
+    ],
+    'jbeta': [
+        curl+'http://www.jsoftware.com/download/j901/install/j901_linux64.tar.gz',
+        'tar xzf j901*',
+        'mv j901* ~/',
+        'ln -s ~/j901/bin/jconsole '+bindir+'j',
+        'rm ~/j901_linux64.tar.gz',
     ],
     'e110': [
         apt+'python3-pip',

@@ -1,5 +1,5 @@
 #!/bin/sh
-export ALTERNATE_EDITOR=""
+
 tmux new-session -d -s 'lx' -n 'phd'
 tmux send-keys 'emacsclient -nw' C-m
 tmux split-window -v -p 10
