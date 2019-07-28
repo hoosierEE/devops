@@ -16,8 +16,9 @@ repodir = '$HOME/repo/'
 
 # aliases for deb packages (just the one at the moment)
 JVER   = '807'  # or 807
-jurl   = 'j{}_{}64.deb'.format(JVER, ['amd','arm'][machine()=='aarch64'])
-jbeta  = 'http://www.jsoftware.com/download/j901/install/j901_linux64.tar.gz'
+mach   = int(machine()=='aarch64')
+jurl   = 'j{}_{}64.deb'.format(JVER, ['amd','arm'][mach])
+jbeta  = 'http://www.jsoftware.com/download/j901/install/j901_'+['linux','raspi'][mach]+'64.tar.gz'
 
 # strings of commands, sent (in order) to subprocess.run()
 TARGETS = {
@@ -48,11 +49,12 @@ TARGETS = {
         'rm '+jurl,
     ],
     'jbeta': [
-        curl+'http://www.jsoftware.com/download/j901/install/j901_linux64.tar.gz',
+        curl+jbeta,
         'tar xzf j901*',
         'mv j901* ~/',
         'ln -s ~/j901/bin/jconsole '+bindir+'j',
-        'rm ~/j901_linux64.tar.gz',
+        'rm ~/j901_'+['linux','raspi'][mach]+'64.tar.gz',
+        'rm -r j901',
     ],
     'e110': [
         apt+'python3-pip',
