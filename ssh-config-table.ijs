@@ -3,3 +3,4 @@ key =: a:-.~~.,{."1 row
 val =: {:"1 row
 idx =: {."1 key i.row
 echo key,/:~3 :'(y{val) (y{idx) } a:#~1+#key'"0 i.#val
+exit''
