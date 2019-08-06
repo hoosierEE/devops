@@ -77,3 +77,12 @@ tlmgr update --self --all
 tlmgr path add
 fmtutil-sys --all
    #+end_src
+
+* TeX size management
+  LaTeX is huge if you install "everything", but most of the time I only need a tiny subset to build my papers.
+  TinyTeX is basically a barebones distro for LaTeX, and =tlmgr= is a command-line tool that can query installed packages (and install new ones).
+
+  Someone built a front-end to =tlmgr= called =texliveonfly.py= which essentially runs =pdflatex= repeatedly, scans the errors for missing dependencies, and installs those with =tlmgr=.
+
+  There is a forum thread about it here: https://latex.org/forum/viewtopic.php?f=12&t=15194 and a copy of version 1.0 is included in this repo.
+
