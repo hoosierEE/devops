@@ -84,5 +84,7 @@ fmtutil-sys --all
 
   Someone built a front-end to =tlmgr= called =texliveonfly.py= which essentially runs =pdflatex= repeatedly, scans the errors for missing dependencies, and installs those with =tlmgr=.
 
+  I found this via the latex stackexchange site here: https://tex.stackexchange.com/a/29452/79479
+
   There is a forum thread about it here: https://latex.org/forum/viewtopic.php?f=12&t=15194 and a copy of version 1.0 is included in this repo.
 
