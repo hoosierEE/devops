@@ -5,7 +5,6 @@ Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use i
 
 * bootstrap.py
   Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.  Probably won't work unless you're also on Crostini/Ubuntu 18.04.
-
   
 ** usage
    #+begin_src shell
@@ -50,41 +49,25 @@ tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | 
    #+end_src
 
 * ssh_config
-  Copy this file to =$HOME/.ssh/config= for better ssh-ing.  BTW you have to put the public key on the server first, either via the GitHub/GitLab web UI, or =ssh-copy-id=.
+  Copy this file to =$HOME/.ssh/config= for better ssh-ing.
 
-* TinyTeX
-  TinyTeX only installs what you need.
+  #+begin_src shell
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/git  # generate key, answer prompts
+ssh-copy-id -i ~/.ssh/git $SERVER  # put key on the server
+  #+end_src
 
-  - [[https://yihui.name/tinytex/][homepage]]
-  - [[https://github.com/brimoran/Linux-on-ASUS-C101PA][someone using it on Crostini]]
-
-** usage
-   1. try to build your =*.tex= files
-   2. see an error message like =! LaTeX Error: File `times.sty' not found.=
-   3. run the following to see what package provides the file:
-      #+begin_src shell
-$ tlmgr search --global --file "/times.sty"
-psnfss:
-        texmf-dist/tex/latex/psnfss/times.sty
-...
-      #+end_src
-   4. finally do =tlmgr install psnfss= to get the needed thing
-   5. if you're awesome, note which packages were installed (i.e. add them to =bootstrap.py=) to avoid this step in the future
-
-   A general-purpose fix for other confusing errors is:
-   #+begin_src shell
-tlmgr update --self --all
-tlmgr path add
-fmtutil-sys --all
-   #+end_src
-
-* TeX size management
-  LaTeX is huge if you install "everything", but most of the time I only need a tiny subset to build my papers.
-  TinyTeX is basically a barebones distro for LaTeX, and =tlmgr= is a command-line tool that can query installed packages (and install new ones).
-
-  Someone built a front-end to =tlmgr= called =texliveonfly.py= which essentially runs =pdflatex= repeatedly, scans the errors for missing dependencies, and installs those with =tlmgr=.
+* TinyTeX + texliveonfly.py
+  =TinyTeX= is a minimal TeX distro, =texliveonfly= is a wonderfully hacky workaround to the fact that tex dependencies are really hard to statically determine.
+  It tries to compile, parses errors to find missing packages, and recompiles until convergence (or if it can't find the thing, I guess).
 
   I found this via the latex stackexchange site here: https://tex.stackexchange.com/a/29452/79479
-
   There is a forum thread about it here: https://latex.org/forum/viewtopic.php?f=12&t=15194 and a copy of version 1.0 is included in this repo.
+
+** Play nice with makefiles
+   If you're using a Makefile workflow to build your tex documents, try replacing the $LATEX compiler option in the makefile with =texliveonfly=.
+
+   #+begin_src diff
+-LATEXMK= latexmk -outdir=./build -pdf
++LATEXMK= texliveonfly
+   #+end_src
 

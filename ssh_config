@@ -1,20 +1,27 @@
-Host github.iu.edu
-HostName github.iu.edu
-User ashroyer
-IdentityFile ~/.ssh/git
-PubkeyAuthentication yes
-VisualHostKey yes
+Host silo
+  Hostname silo.sice.indiana.edu
+Host tank
+  Hostname tank.sice.indiana.edu
+  ForwardX11Timeout 7d
+Host hulk 
+  Hostname hulk.sice.indiana.edu
+  ForwardX11Timeout 7d
+Host cadence
+  Hostname tank.sice.indiana.edu
+  LocalForward 5901 tank.sice.indiana.edu:5901
+  ForwardX11Timeout 7d
 
-Host github.com
-HostName github.com
-User hoosieree
-IdentityFile ~/.ssh/git
-PubkeyAuthentication yes
-VisualHostKey yes
+Host git*
+  ForwardX11 no
+Host github.iu.edu github.com gitlab.com
+  IdentityFile ~/.ssh/git
+Host github.com gitlab.com
+  User hoosieree
 
-Host gitlab.com
-HostName gitlab.com
-User hoosieree
-IdentityFile ~/.ssh/git
-PubkeyAuthentication yes
-VisualHostKey yes
+Host *
+  User ashroyer
+  ForwardAgent yes
+  ForwardX11 yes
+  Compression yes
+  IdentityFile ~/.ssh/dev
+  PubkeyAuthentication yes
