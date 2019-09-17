@@ -3,6 +3,13 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css"/>
 Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
 
+* Starting anew: Debian Buster distro on R13
+1. generate rsa keys =ssh-keygen -t rsa -b 4096 -C "my awesome ssh key"= and /use a passphrase/
+2. copy keys to git{hub.com, hub.iu.edu, lab.com}
+3. =exec ssh-agent bash=
+4. =ssh-add=
+5. install stuff using this script
+
 * bootstrap.py
   Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.  Probably won't work unless you're also on Crostini/Ubuntu 18.04.
   
