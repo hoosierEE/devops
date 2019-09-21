@@ -6,15 +6,13 @@ Host tank
 Host hulk 
   Hostname hulk.sice.indiana.edu
   ForwardX11Timeout 7d
-Host cadence
+Host cad
   Hostname tank.sice.indiana.edu
   LocalForward 5901 tank.sice.indiana.edu:5901
   ForwardX11Timeout 7d
 
 Host git*
   ForwardX11 no
-Host github.iu.edu github.com gitlab.com
-  IdentityFile ~/.ssh/git
 Host github.com gitlab.com
   User hoosieree
 
@@ -23,5 +21,4 @@ Host *
   ForwardAgent yes
   ForwardX11 yes
   Compression yes
-  IdentityFile ~/.ssh/dev
-  PubkeyAuthentication yes
+  PubkeyAuthentication yesubkeyAuthentication yes
