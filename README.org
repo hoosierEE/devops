@@ -1,22 +1,28 @@
-#+TITLE: devops
-#+OPTIONS: toc:nil date:nil num:nil html-postamble:nil
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css"/>
-Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use it instead of bash for bootstrapping a dev environment.
+Idea: Since [[https://old.reddit.com/r/Crostini/][Crostini]] comes with Python3, use Python3 for bootstrapping a dev environment.
 
 * Starting anew: Debian Buster distro on R13
-1. generate rsa keys =ssh-keygen -t rsa -b 4096 -C "my awesome ssh key"= and /use a passphrase/
-2. copy keys to git{hub.com, hub.iu.edu, lab.com}
-3. =exec ssh-agent bash=
-4. =ssh-add=
-5. install stuff using this script
+  1. generate rsa keys =ssh-keygen -t rsa -b 4096 -C "my awesome ssh key"= and /use a passphrase/
+  2. copy keys to git{hub.com, hub.iu.edu, lab.com}
+  3. =exec ssh-agent bash=
+  4. =ssh-add=
+  5. install stuff using this script
+
+  #+begin_src shell
+ssh-keygen -t rsa -b 4096 # [-f ~/stuff/my-fancy-key] override the default path if you want 
+exec ssh-agent bash
+ssh-add  # [~/stuff/my-fancy-key]
+  #+end_src
 
 * bootstrap.py
-  Installs things.  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.  Probably won't work unless you're also on Crostini/Ubuntu 18.04.
+  Installs things.
+  Assumes passwordless =sudo= privilege, which is the case in the Crostini container.
+  /Probably/ won't work unless you're also on Crostini/Ubuntu 18.04.
   
 ** usage
    #+begin_src shell
-$ python3 bootstrap.py <options> [--dry-run]
+$ python3 bootstrap.py <targets> [--dry-run]
    #+end_src
+
    - =options= are any of the recipes in the =TARGETS= dictionary.
    - use =--dry-run= to see what would happen without changing anything.
    - use =emacs_org_fix= if spacemacs org-export has [[https://github.com/syl20bnr/spacemacs/issues/6296#issuecomment-289727260][this issue]]. 
@@ -24,17 +30,21 @@ $ python3 bootstrap.py <options> [--dry-run]
    #+begin_src shell
 $ python3 bootstrap.py k
    #+end_src
+
    This would clone the [[https://github.com/kevinlawler/kona.git][kona]] source from GitHub, =make= it, and put a symlink to the executable in =$HOME/bin/k=.
+
    #+begin_src shell
 $ python3 bootstrap.py j xinu
    #+end_src
+
    This would install [[https://code.jsoftware.com/wiki/System/Installation/Linux][J]] as a =.deb= package, and clone my private copy of the [[https://github.iu.edu/SICE-OS/xinu][Xinu]] repo.
+
 ** help text
    Call the script with no arguments to see this message:
 
    #+begin_src shell
-Usage: python3 bootstrap.py <options> [--dry-run]
-Possible options:
+Usage: python3 bootstrap.py <targets> [--dry-run]
+Possible targets:
 
 xinu:          sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
                git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git $HOME/repo/xinu-s19
@@ -59,8 +69,9 @@ tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | 
   Copy this file to =$HOME/.ssh/config= for better ssh-ing.
 
   #+begin_src shell
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/git  # generate key, answer prompts
-ssh-copy-id -i ~/.ssh/git $SERVER  # put key on the server
+ssh-keygen -t rsa -b 4096 # [-f ~/stuff/my-fancy-key] if you haven't already done this
+ssh-copy-id $YOUR_USER_NAME@$SOME_SERVER  # copy your key to a server
+# ssh-copy-id [-i /non/default/path/to/key] $YOUR_USER_NAME@$SOME_SERVER  # if you aren't using the default (~/.ssh/id_rsa)
   #+end_src
 
 * TinyTeX + texliveonfly.py
