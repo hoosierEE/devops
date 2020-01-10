@@ -12,7 +12,7 @@ gitrec  = 'git clone --recursive '
 curl    = 'curl -O '
 dpkg    = 'sudo dpkg -i '
 pip3    = 'pip3 install --user '
-bindir  = '$HOME/bin/'
+homebin = '$HOME/bin/'
 repodir = '$HOME/repo/'
 
 # aliases for deb packages (just the one at the moment)
@@ -36,24 +36,30 @@ TARGETS = {
         apt + 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
         gitrec + 'git@github.iu.edu:ashroyer/xinu-s19.git ' + repodir + 'xinu-s19',
     ],
+    'ssh-ident': [
+        # git + 'git@github.com:ccontavalli/ssh-ident.git ' + repodir + 'ssh-ident',
+        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'ssh',
+        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'scp',
+        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'sftp',
+    ],
     'k': [
         apt + 'rlwrap make',
-        git + 'git@github.com:kevinlawler/kona.git ' + repodir + 'kona',
+        git + 'git@github.com:kevinlawler/kona.git ' + repodir,
         'cd ' + repodir + 'kona && make && cd -',
-        'rm -f ' + bindir + 'k',
-        'ln -s ' + repodir + 'kona/k ' + bindir + 'k',
+        'rm -f ' + homebin + 'k',
+        'ln -s ' + repodir + 'kona/k ' + homebin + 'k',
     ],
     'j': [
         curl + 'http://www.jsoftware.com/download/j' + JVER + '/install/' + jurl,
         dpkg + jurl,
-        'ln -s $(which ijconsole) ' + bindir + 'j',
+        'ln -s $(which ijconsole) ' + homebin + 'j',
         'rm ' + jurl,
     ],
     'jbeta': [
         curl + jbeta,
         'tar xzf j901*',
         'mv j901* ~/',
-        'ln -s ~/j901/bin/jconsole ' + bindir + 'j',
+        'ln -s ~/j901/bin/jconsole ' + homebin + 'j',
         'rm ~/j901_' + ['linux','raspi'][mach] + '64.tar.gz',
         'rm -r j901',
     ],
@@ -75,9 +81,8 @@ USAGE = '''
 Usage: python3 {} <options> [--dry-run]
 Possible options:
 
-{}'''.format(sys.argv[0], ''.join(
-    ['{}: {}{}\n'
-     .format(k, ' '*(LONGEST-len(k)), ('\n  '+' '*LONGEST).join(TARGETS[k]))
+{}'''.format(sys.argv[0], "".join(['{}: {}{}\n'.format(
+    k, ' '*(LONGEST-len(k)), ('\n  '+' '*LONGEST).join(TARGETS[k]))
     for k in TARGETS]))
 
 def shell(x):
@@ -85,19 +90,21 @@ def shell(x):
 
 if __name__ == "__main__":
     ARGS = sys.argv[1:]
-    if not sum([int(a in ARGS) for a in TARGETS]): print(USAGE); exit()
+    if not sum([int(a in ARGS) for a in TARGETS]):
+        print(USAGE); exit()
 
     # add pre-requisites here if desired
     targets = [
-        [update, 'mkdir -p '+bindir],
-        [apt+'wget'],
+        # [update, 'mkdir -p '+homebin],
+        # [apt+'wget'],
     ]
     for a in TARGETS: # append targets specified on CLI
         if a in ARGS:
             targets.append(TARGETS[a])
 
     dry = '--dry-run' in ARGS
-    if dry: print('  [omit --dry-run to perform the following commands]')
+    if dry:
+        print('  [omit --dry-run to perform the following commands]')
     for tar in targets: # install (or just print) everything in the list
         for cmd in tar:
             [shell, print][dry](cmd)
