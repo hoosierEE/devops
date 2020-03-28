@@ -67,7 +67,7 @@ TARGETS = {
         apt + 'python3-pip',
         'pip3 install --user myhdl',
     ],
-    'tex': [
+    'tinytex': [
         'wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh'
     ],
     # 'texlive': [
