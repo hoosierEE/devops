@@ -1,0 +1,10 @@
+interesting org-mode links
+
+BEAMER examples: https://www.draketo.de/light/english/politics-and-free-software/recipes-presentations-beamer-latex-using-emacs-org-mode
+
+TONS of good uses of org-mode: http://ehneilsen.net/notebook/orgExamples/org-examples.html#sec-23-1
+
+cheatsheet: https://emacsclub.github.io/html/org_tutorial.html
+
+code blocks: https://orgmode.org/manual/Environment-of-a-Code-Block.html#Environment-of-a-Code-Block
+

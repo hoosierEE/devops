@@ -39,31 +39,45 @@ $ python3 bootstrap.py j xinu
 
    This would install [[https://code.jsoftware.com/wiki/System/Installation/Linux][J]] as a =.deb= package, and clone my private copy of the [[https://github.iu.edu/SICE-OS/xinu][Xinu]] repo.
 
-** help text
-   Call the script with no arguments to see this message:
-
-   #+begin_src shell
-Usage: python3 bootstrap.py <targets> [--dry-run]
-Possible targets:
-
-xinu:          sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
-               git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git $HOME/repo/xinu-s19
-e110:          sudo apt-get install -y python3-pip
-               pip3 install --user myhdl
-emacs:         sudo apt-get install -y emacs25-nox unifont
-emacs_org_fix: for dir in "$HOME/.emacs.d/elpa/org-"*/; do find $dir -name "*.elc" -delete; done
-k:             sudo apt-get install -y rlwrap make
-               git clone git@github.com:kevinlawler/kona.git $HOME/repo/kona
-               cd $HOME/repo/kona && make && cd -
-               rm -f $HOME/bin/k
-               ln -s $HOME/repo/kona/k $HOME/bin/k
-texlive:       sudo apt-get install -y texlive-latex-recommended
-j:             curl -O http://www.jsoftware.com/download/j807/install/j807_arm64.deb
-               sudo dpkg -i j807_arm64.deb
-               ln -s $(which ijconsole) $HOME/bin/j
-               rm j807_arm64.deb
-tex:           wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh
+** help
+   #+begin_src shell :results output :exports both
+  python3 bootstrap.py  
    #+end_src
+
+   #+RESULTS:
+   #+begin_example
+
+   Usage: python3 bootstrap.py <options> [--dry-run]
+   Possible options:
+
+   tmux:          sudo apt-get install -y tmux
+   emacs:         sudo apt-get install -y emacs25-nox unifont
+   emacs_org_fix: for dir in "$HOME/.emacs.d/elpa/org-"*/; do find $dir -name "*.elc" -delete; done
+   xinu:          sudo apt-get install -y qemu gawk bison flex libz-dev gcc-arm-none-eabi make
+                  git clone --recursive git@github.iu.edu:ashroyer/xinu-s19.git $HOME/repo/xinu-s19
+   ssh-ident:     ln -s $HOME/repo/ssh-ident/ssh-ident $HOME/bin/ssh
+                  ln -s $HOME/repo/ssh-ident/ssh-ident $HOME/bin/scp
+                  ln -s $HOME/repo/ssh-ident/ssh-ident $HOME/bin/sftp
+   k:             sudo apt-get install -y rlwrap make
+                  git clone git@github.com:kevinlawler/kona.git $HOME/repo/
+                  cd $HOME/repo/kona && make && cd -
+                  rm -f $HOME/bin/k
+                  ln -s $HOME/repo/kona/k $HOME/bin/k
+   j:             curl -O http://www.jsoftware.com/download/j807/install/j807_amd64.deb
+                  sudo dpkg -i j807_amd64.deb
+                  ln -s $(which ijconsole) $HOME/bin/j
+                  rm j807_amd64.deb
+   jbeta:         curl -O http://www.jsoftware.com/download/j901/install/j901_linux64.tar.gz
+                  tar xzf j901*
+                  mv j901* ~/
+                  ln -s ~/j901/bin/jconsole $HOME/bin/j
+                  rm ~/j901_linux64.tar.gz
+                  rm -r j901
+   myhdl:         sudo apt-get install -y python3-pip
+                  pip3 install --user myhdl
+   tinytex:       wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh
+
+   #+end_example
 
 * ssh_config
   Copy this file to =$HOME/.ssh/config= for better ssh-ing.
