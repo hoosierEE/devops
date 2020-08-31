@@ -36,12 +36,6 @@ TARGETS = {
         apt + 'qemu gawk bison flex libz-dev gcc-arm-none-eabi make',
         gitrec + 'git@github.iu.edu:ashroyer/xinu-s19.git ' + repodir + 'xinu-s19',
     ],
-    'ssh-ident': [
-        # git + 'git@github.com:ccontavalli/ssh-ident.git ' + repodir + 'ssh-ident',
-        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'ssh',
-        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'scp',
-        'ln -s ' + repodir + 'ssh-ident/ssh-ident ' + homebin + 'sftp',
-    ],
     'k': [
         apt + 'rlwrap make',
         git + 'git@github.com:kevinlawler/kona.git ' + repodir,
